@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
       this.todoList = document.querySelector(".todo-list");
       this.taskItem = document.querySelector(".task-item");
       this.todos = [];
+      this.editedTime = document.getElementById("edit");
 
       this.init();
     }
@@ -20,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       this.loadTodos();
       this.render();
+      this.updateEditedTime();
     }
 
     addTodo() {
@@ -29,12 +31,14 @@ document.addEventListener("DOMContentLoaded", () => {
         id: Date.now(),
         text: text,
         completed: false,
+        timestamp: Date.now(),
       };
 
       this.todos.push(todo);
       this.todoInput.value = "";
       this.saveTodos();
       this.render();
+      this.updateEditedTime();
     }
 
     toggleTodo(id) {
@@ -81,7 +85,24 @@ document.addEventListener("DOMContentLoaded", () => {
       checkbox.checked = todo.completed;
       checkbox.addEventListener("change", () => this.toggleTodo(todo.id));
 
+      const timestampSpan = document.createElement("span");
+      const timestamp = new Date(todo.timestamp);
+
+      if (isNaN(timestamp.getTime())) {
+        timestampSpan.textContent = " - Invalid date";
+      } else {
+        const formattedDate = timestamp.toLocaleDateString([], {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        });
+        timestampSpan.textContent = ` - ${formattedDate}`;
+      }
+
+      timestampSpan.className = "todo-timestamp";
+
       li.appendChild(textSpan);
+      li.appendChild(timestampSpan);
       li.appendChild(checkbox);
 
       return li;
@@ -102,6 +123,11 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
     }
+
+    updateEditedTime() {
+      const editTime = new Date().toLocaleString();
+      this.editedTime.textContent = ` Last edited on: ${editTime}`;
+    }
   }
 
   new TodoApp();
@@ -110,6 +136,10 @@ document.addEventListener("DOMContentLoaded", () => {
 let changeColor = document.getElementById("change-color");
 
 changeColor.addEventListener("click", () => {
-  document.querySelector(".todo-form").style.backgroundColor =
-    "rgba(223, 221, 221, 0.72)";
+  const todoForm = document.querySelector(".todo-form");
+  if (todoForm.style.backgroundColor === "rgba(223, 221, 221, 0.8)") {
+    todoForm.style.backgroundColor = "";
+  } else {
+    todoForm.style.backgroundColor = "rgba(223, 221, 221, 0.8)";
+  }
 });

@@ -89,6 +89,7 @@ body {
   border-radius: 50%;
   cursor: pointer;
   border: none;
+  box-shadow: 6px 6px 10px rgba(12, 11, 0, 0.295);
 }
 
 .todo-list {
@@ -116,6 +117,20 @@ body {
 .todo-text.completed {
   text-decoration: line-through;
   color: rgba(0, 0, 0, 0.5);
+}
+
+.todo-timestamp {
+  font-size: 0.7em;
+  color: #888;
+  right: 40px;
+}
+
+#edit {
+  position: absolute;
+  top: 90%;
+  left: 6%;
+  font-size: 200;
+  z-index: 10;
 }
 
 .task-item {
